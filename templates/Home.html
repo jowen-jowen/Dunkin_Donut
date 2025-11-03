@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Dunkin' Donuts</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lobster', cursive;
+            background: none;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        /* 🎥 Fullscreen video background */
+        .video-bg {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 20px 15%;
+            background: rgba(0,0,0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo img {
+            width: 125px;
+        }
+
+        nav {
+            flex: 1;
+            text-align: right;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f5821f;
+        }
+
+        .hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 100px auto;
+        padding: 0 50px;
+        gap: 50px;
+        }
+
+        .hero-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .hero-text h1 {
+            font-size: 60px;
+            line-height: 1.2;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+            margin-bottom: 15px;
+        }
+
+        .hero-text p {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #f5821f;
+            color: #ffffff;
+            padding: 12px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #ffa64d;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 1000px;
+            border-radius: 5px;
+        }
+
+        .section {
+            background: rgba(245, 130, 31, 0.85);
+            border-radius: 30px;
+            padding: 40px;
+            margin: 80px auto;
+            max-width: 1100px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+            font-size: 36px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .title::after {
+            content: '';
+            background: #fff;
+            width: 80px;
+            height: 5px;
+            border-radius: 5px;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .front {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .front img {
+            width: 100%;
+            border-radius: 20px;
+            transition: transform 0.4s;
+        }
+
+        .front img:hover {
+            transform: scale(1.05);
+        }
+
+        h2, p {
+            color: #fff;
+        }
+
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
+</head>
+<body>
+    <video autoplay muted loop class="video-bg">
+        <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
+    </video>
+
+    <div class="navbar">
+        <div class="logo">
+            <a href="/"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/products">Products</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Dunkin' Donuts</h1>
+            <p>Order Online Now!</p>
+            <a href="/products" class="btn">Order Now! →</a>
+        </div>
+        <div class="hero-image">
+            <img src="{{ url_for('static', filename='background.jpg') }}" alt="Donuts">
+        </div>
+    </section>
+    <br><br>
+
+    <div class="section">
+        <h1 class="title">Limited Time Only</h1>
+        <div class="front">
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='promo1.jpg') }}" alt="">
+                <h2>SB19 Dunkin' Flask</h2>
+                <p>(Sold Out)</p>
+            </div>
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='promo2.jpg') }}" alt="">
+                <h2>Dunkin' Drip Coffee</h2>
+                <p>(Available)</p>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br><br>
+
+
+    <div class="section">
+        <h1 class="title">Bundles</h1>
+        <div class="front">
+            <div class="col-5">
+                <img src="{{ url_for('static', filename='bundle1.jpg') }}" alt="">
+                <h2>Dozen Premium Donuts</h2>
+                <p>(Available)</p>
+            </div>
+            <div class="col-5">
+                <img src="{{ url_for('static', filename='bundle2.jpg') }}" alt="">
+                <h2>Pasalubong</h2>
+                <p>(Available)</p>
+            </div>
+            <div class="col-5">
+                <img src="{{ url_for('static', filename='bundle3.jpg') }}" alt="">
+                <h2>Super Barkada Bundle</h2>
+                <p>(Available)</p>
+            </div>
+        </div>
+    </div>
+<br><br><br><br>
+</body>
+</html>
