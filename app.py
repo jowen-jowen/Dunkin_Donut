@@ -17,5 +17,18 @@ def contact():
 def products():
     return render_template('Products.html')
 
+@app.route('/register')
+def register():
+    return render_template('Register.html')
+
+@app.route('/login')
+def login():
+    return render_template('Login.html')
+
+@app.route('/cart')
+def cart():
+    return render_template('Cart.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)

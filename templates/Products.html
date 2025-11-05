@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Dunkin' Donuts</title>
+    <title>Products</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
             justify-content: space-between;
             width: 100%;
             padding: 20px 15%;
-            background: rgba(0,0,0, 0.5);
+            background: rgba(0, 0, 0, 0.5);
             position: relative;
             z-index: 10;
         }
@@ -38,15 +38,34 @@
         }
 
         nav ul {
-            display: inline-block;
-            list-style-type: none;
+            list-style: none;
         }
 
         nav ul li {
             display: inline-block;
-            margin-right: 20px;
+            margin-left: 30px;
         }
 
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f5821f;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 5%;
+            }
+
+            nav ul li {
+                margin-left: 15px;
+            }
+        }
         a {
             text-decoration: none;
             color: #ffffff;
@@ -170,18 +189,10 @@
             border-radius: 30px;
         }
 
-        .navbar {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-        }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <div class="container">
-            <div class="navbar">
+    <div class="navbar">
                 <div class="logo">
                     <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='logo.png') }}" width="125px" alt="Dunkin' logo"></a>
                 </div>
@@ -195,6 +206,8 @@
                 </nav>
             </div>
 
+    <div class="header">
+        <div class="container">
             <div class="h1">Products</div>
 
             <!-- Featured promos -->

@@ -3,7 +3,13 @@
 <head>
     <meta charset="utf-8">
     <title>Dunkin' Donuts</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
+
     <style type="text/css">
+
         * {
             margin: 0;
             padding: 0;
@@ -14,10 +20,9 @@
             font-family: 'Lobster', cursive;
             background: none;
             overflow-x: hidden;
-            color: #fff;
+            background: #FD5DA8;
         }
 
-        /* 🎥 Fullscreen video background */
         .video-bg {
             position: fixed;
             right: 0;
@@ -26,6 +31,10 @@
             min-height: 100%;
             z-index: -1;
             object-fit: cover;
+        }
+
+        .logo img {
+            width: 125px;
         }
 
         .navbar {
@@ -37,10 +46,6 @@
             background: rgba(0,0,0, 0.5);
             position: relative;
             z-index: 10;
-        }
-
-        .logo img {
-            width: 125px;
         }
 
         nav {
@@ -154,28 +159,37 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 30px;
         }
 
-        .front img {
+        .col-4, .col-5 {
+            flex: 1 1 300px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .col-4 img, .col-5 img {
             width: 100%;
             border-radius: 20px;
             transition: transform 0.4s;
         }
 
-        .front img:hover {
+        .col-4 img:hover, .col-5 img:hover {
             transform: scale(1.05);
+        }
+
+        h1{
+            color: #ffffff;
         }
 
         h2, p {
             color: #fff;
+            margin-top: 10px;
         }
 
     </style>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <video autoplay muted loop class="video-bg">

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>About</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
@@ -15,10 +16,10 @@
         }
 
         body {
-            font-family: 'Anton', sans-serif;
-            font-family: 'Italianno', cursive;
             font-family: 'Lobster', cursive;
+            background: none;
             background: #FD5DA8;
+            overflow-x: hidden;
         }
 
         .navbar {
@@ -27,9 +28,13 @@
             justify-content: space-between;
             width: 100%;
             padding: 20px 15%;
-            background: rgba(0,0,0, 0.5);
+            background: rgba(0, 0, 0, 0.5);
             position: relative;
             z-index: 10;
+        }
+
+        .logo img {
+            width: 125px;
         }
 
         nav {
@@ -38,82 +43,107 @@
         }
 
         nav ul {
-            display: inline-block;
             list-style: none;
         }
 
         nav ul li {
             display: inline-block;
-            margin-right: 20px;
+            margin-left: 30px;
         }
 
-        a {
+        nav ul li a {
             text-decoration: none;
             color: #ffffff;
+            font-size: 18px;
+            transition: 0.3s;
         }
 
-        p {
-            color: #000000;
+        nav ul li a:hover {
+            color: #f5821f;
         }
-
-        .container {
-            max-width: 1300px;
-            margin: auto;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-
         .profile-box {
-            text-align: center;
-            background: #f5821f;
-            border: none;
-            padding: 50px;
-            margin: 80px 250px;
+            background: rgba(245, 130, 31, 0.9);
             border-radius: 30px;
-            color: #ffffff;
+            text-align: center;
+            padding: 50px;
+            margin: 100px auto;
+            max-width: 800px;
+            color: #000;
         }
 
         .profile-box img {
             width: 350px;
             height: 300px;
             border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .profile-box h1 {
-            color: #ffffff;
+            color: black;
             margin-bottom: 20px;
+            font-size: 36px;
         }
 
         .profile-box p {
-            color: #000000;
-            font-size: 16px;
+            color: black;
+            font-size: 18px;
             line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 5%;
+            }
+
+            nav ul li {
+                margin-left: 15px;
+            }
+
+            .profile-box {
+                width: 90%;
+                padding: 30px;
+            }
+
+            .profile-box h1 {
+                font-size: 28px;
+            }
+
+            .profile-box p {
+                font-size: 16px;
+            }
+
+            .profile-box img {
+                width: 250px;
+                height: 220px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+
         <div class="navbar">
             <div class="logo">
-                <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='logo.png') }}" width="125px" alt="Dunkin' Logo"></a>
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Dunkin' Logo"></a>
             </div>
             <nav>
                 <ul>
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     <li><a href="{{ url_for('products') }}">Products</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
                     <li><a href="{{ url_for('about') }}">About</a></li>
                 </ul>
             </nav>
         </div>
-    </div>
+
 
     <div class="profile-box">
         <h1>William Rosenberg</h1>
         <img src="{{ url_for('static', filename='William.png') }}" alt="William Rosenberg">
         <p>
-            William Rosenberg was an American entrepreneur who founded the Dunkin' Donuts franchise in 1950 in Quincy, Massachusetts,
+            William Rosenberg was an American entrepreneur who founded the Dunkin' Donuts franchise in 1950 in Quincy,
+            Massachusetts,
             originally named the "Open Kettle" doughnut shop when established in 1948.
             By the end of 2011, there were more than 10,000 outlets of the chain in 32 countries.
         </p>
@@ -124,8 +154,10 @@
         <img src="{{ url_for('static', filename='David.jpg') }}" alt="David Hoffmann">
         <p>
             Dave Hoffmann is Chief Executive Officer for Dunkin’ Brands.
-            He joined Dunkin’ Brands in October 2016 as President, Dunkin’ U.S., overseeing all operations, marketing, and development for the brand domestically.
-            He was appointed CEO in July 2018, expanding responsibilities to include Baskin–Robbins and international operations.
+            He joined Dunkin’ Brands in October 2016 as President, Dunkin’ U.S., overseeing all operations, marketing, and
+            development for the brand domestically.
+            He was appointed CEO in July 2018, expanding responsibilities to include Baskin–Robbins and international
+            operations.
         </p>
     </div>
 
@@ -134,7 +166,8 @@
         <img src="{{ url_for('static', filename='Nigel.jpg') }}" alt="Nigel Travis">
         <p>
             Nigel Travis is an English businessman and corporate executive.
-            He was the CEO of the Dunkin' Brands group from January 2009 to July 2018, and has served on the boards of other major corporations including Papa John's International and Blockbuster LLC.
+            He was the CEO of the Dunkin' Brands group from January 2009 to July 2018, and has served on the boards of other
+            major corporations including Papa John's International and Blockbuster LLC.
         </p>
     </div>
 
@@ -143,8 +176,10 @@
         <img src="{{ url_for('static', filename='David1.jpg') }}" alt="David Mann">
         <p>
             David Mann was named Senior Vice President and Chief Legal Officer of Dunkin’ Brands in March 2019.
-            Mann is an experienced lawyer with global transactional and operations experience, and a track record of developing strong franchisee and business partner relationships.
-            Before Dunkin’, he spent over two decades at Marriott International, serving as Deputy General Counsel and Corporate Secretary.
+            Mann is an experienced lawyer with global transactional and operations experience, and a track record of
+            developing strong franchisee and business partner relationships.
+            Before Dunkin’, he spent over two decades at Marriott International, serving as Deputy General Counsel and
+            Corporate Secretary.
         </p>
     </div>
 
