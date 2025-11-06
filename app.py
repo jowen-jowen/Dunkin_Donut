@@ -17,13 +17,13 @@ def contact():
 def products():
     return render_template('Products.html')
 
-@app.route('/register')
+@app.route('/forgotPass')
 def register():
-    return render_template('Register.html')
+    return render_template('ForgotPass.html')
 
 @app.route('/login')
 def login():
-    return render_template('Login.html')
+    return render_template('LogReg.html')
 
 @app.route('/cart')
 def cart():

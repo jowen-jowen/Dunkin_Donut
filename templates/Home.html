@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <title>Dunkin' Donuts</title>
 
+    <link rel="icon" href="{{ url_for('static', filename='tabicon.png') }}" type="image/png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
@@ -202,10 +204,10 @@
         </div>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/products">Products</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/about">About</a></li>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('products') }}">Products</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('login') }}">Login/Register</a></li>
             </ul>
         </nav>
     </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Contact</title>
-
+    <link rel="icon" href="{{ url_for('static', filename='tabicon.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap"
@@ -32,10 +32,14 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            padding: 20px 15%;
-            background: rgba(0, 0, 0, 0.5);
+            padding: 20px 15%; /* same as Login/Register */
+            background: rgba(0, 0, 0, 0.5); /* semi-transparent */
             position: relative;
             z-index: 10;
+        }
+
+        .logo img {
+            width: 125px;
         }
 
         nav {
@@ -49,7 +53,7 @@
 
         nav ul li {
             display: inline-block;
-            margin-left: 30px;
+            margin-left: 30px; /* spacing between links */
         }
 
         nav ul li a {
@@ -62,6 +66,16 @@
         nav ul li a:hover {
             color: #f5821f;
         }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 5%;
+            }
+            nav ul li {
+                margin-left: 15px;
+            }
+        }
+
 
         .contacts {
             text-align: center;
@@ -123,10 +137,10 @@
         </div>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/products">Products</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/about">About</a></li>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('products') }}">Products</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('login') }}">Login/Register</a></li>
             </ul>
         </nav>
     </div>

@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8">
     <title>Products</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='tabicon.png') }}" type="image/png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
@@ -18,7 +21,35 @@
             font-family: 'Anton', sans-serif;
             font-family: 'Italianno', cursive;
             font-family: 'Lobster', cursive;
-            background: #FD5DA8;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #f5821f, #FD5DA8);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.25); /* soft fade effect */
+            z-index: -1;
         }
 
         .navbar {
@@ -43,7 +74,7 @@
 
         nav ul li {
             display: inline-block;
-            margin-left: 30px;
+            margin-left: 30px; /* spacing between links */
         }
 
         nav ul li a {
@@ -61,7 +92,6 @@
             .navbar {
                 padding: 15px 5%;
             }
-
             nav ul li {
                 margin-left: 15px;
             }
@@ -88,14 +118,7 @@
             flex-wrap: wrap;
             justify-content: space-around;
             padding-right: 60px;
-        }
 
-        .header .row {
-            margin-top: 70px;
-        }
-
-        .header {
-            background: #FD5DA8;
         }
 
         .h1 {
@@ -160,6 +183,7 @@
             margin-top: 80px;
             padding: 30px 0;
             border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
         }
 
         .col-2 {
@@ -187,6 +211,7 @@
             margin-top: 80px;
             padding: 30px 0;
             border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
         }
 
     </style>
@@ -201,12 +226,13 @@
                         <li><a href="{{ url_for('home') }}">Home</a></li>
                         <li><a href="{{ url_for('products') }}">Products</a></li>
                         <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                        <li><a href="{{ url_for('about') }}">About</a></li>
+                        <li><a href="{{ url_for('login') }}">Login/Register</a></li>
                     </ul>
                 </nav>
             </div>
 
-    <div class="header">
+    <br><br><br>
+
         <div class="container">
             <div class="h1">Products</div>
 
@@ -249,7 +275,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
 </body>
 </html>
