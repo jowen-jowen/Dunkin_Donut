@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="cb6c1a50-c784-4990-8a44-f5a07770fb5f" name="flask_db@localhost Mapping">
+      <data-sources db="08f0084d-fe4f-44b4-8bb4-ef97f23d73ac" />
+    </mapping>
+  </component>
+</project>
