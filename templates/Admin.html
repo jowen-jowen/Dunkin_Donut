@@ -1,10 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>Admin</title>
+    <link rel="icon" href="{{ url_for('static', filename='tabicon.png') }}" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lobster', cursive;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #f5821f, #FD5DA8);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: -1;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 20px 15%;
+            background: rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 25px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f5821f;
+        }
+
+        .shops {
+            text-align: center;
+            background: rgba(245, 130, 31, 0.9);
+            border-radius: 30px;
+            padding: 60px;
+            max-width: 700px;
+            margin: 150px auto;
+            color: #000;
+        }
+
+        .shops h1 {
+            font-size: 48px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background-color: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        form {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        form label {
+            font-size: 18px;
+            color: #000;
+        }
+
+        form input[type="text"], form input[type="file"] {
+            padding: 10px;
+            border-radius: 10px;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+        }
+
+        form button {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .image-card {
+            text-align: center;
+        }
+
+        .image-card img {
+            border-radius: 10px;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        h2 {
+            color: #000;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='logo.png') }}" width="125px" alt="Dunkin' logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('shops') }}">Shops</a></li>
+                <li><a href="{{ url_for('cart') }}">Cart</a></li>
+                <li><a href="{{ url_for('login') }}">Login/Register</a></li>
+            </ul>
+        </nav>
+    </div>
 
+    <div class="shops">
+        <h1>Admin Dashboard</h1>
+
+        <!-- Buttons -->
+        <button id="toggleShopForm">➕ Add Shops</button>
+
+
+        <button id="toggleProductForm">➕ Add Shop Products</button>
+
+        <!-- Add Shop Form -->
+        <form id="shopForm" action="{{ url_for('upload_shops') }}" method="POST" enctype="multipart/form-data">
+            <label for="shop_name">Shop Name:</label><br>
+            <input type="text" name="shop_name" placeholder="Enter shop name" required><br>
+
+            <label for="shop_images">Select Shop Images:</label><br>
+            <input type="file" name="shop_images" multiple accept="image/*" required><br>
+
+            <button type="submit">Upload Shop</button>
+        </form>
+
+        <!-- Add Product Form -->
+        <form id="productForm" action="{{ url_for('upload_img') }}" method="POST" enctype="multipart/form-data">
+            <label for="image_name">Product Name:</label><br>
+            <input type="text" name="image_name" placeholder="Enter product name" required><br>
+
+            <label for="images">Select Product Images:</label><br>
+            <input type="file" name="images" multiple accept="image/*" required><br>
+
+            <button type="submit">Upload Product</button>
+        </form>
+    </div>
+
+    <!-- for testing if the images are being uploaded into the database table-->
+    <!-- for products onlY-->
+    <h2>Uploaded Products</h2>
+    <div class="image-grid">
+        {% for img in images %}
+            <div class="image-card">
+                <img src="{{ url_for('static', filename='uploads/' + img.dunkin_img) }}" alt="{{ img.name }}">
+                <p>{{ img.name }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        const shopBtn = document.getElementById('toggleShopForm');
+        const shopForm = document.getElementById('shopForm');
+
+
+        const productBtn = document.getElementById('toggleProductForm');
+        const productForm = document.getElementById('productForm');
+
+        shopBtn.addEventListener('click', () => {
+            productForm.style.display = 'none';
+            shopForm.style.display = shopForm.style.display === 'none' ? 'block' : 'none';
+        });
+
+        productBtn.addEventListener('click', () => {
+            shopForm.style.display = 'none';
+            productForm.style.display = productForm.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
 </body>
 </html>

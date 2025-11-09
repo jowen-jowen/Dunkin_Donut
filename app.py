@@ -1,9 +1,9 @@
+import random  # ✅ use correct module for randint
 import smtplib
 from email.mime.text import MIMEText
-import random  # ✅ use correct module for randint
 
-from flask import Flask, render_template, request, redirect, url_for, session
 import mysql.connector
+from flask import Flask, render_template, request, redirect, url_for, session
 from mysql.connector import Error
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -15,37 +15,143 @@ def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Css@12345",  # your MySQL password
+        password="Css@12345",  #MySQL password
         database="donut_db"
     )
 
-# --- ROUTES ---
 
+import os
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Create folder if it doesn't exist
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------- upload_shops Route = Shops Image Upload
+
+# for uploading the pictures to shops table in the database
+@app.route('/upload_shops', methods=['POST'])
+def upload_shops():
+    shop_name = request.form['shop_name']
+    file_shop = request.files.getlist('shop_images')
+
+    if not file_shop:
+        return "No file selected", 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        for fileshop in file_shop:
+            if fileshop and allowed_file(fileshop.filename):
+                filename = secure_filename(fileshop.filename)
+                fileshop.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                cursor.execute("INSERT INTO shops (name, shop_img) VALUES (%s, %s)", (shop_name, filename))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('admin'))
+
+    except Exception as e:
+        return f"Upload failed: {e}"
+
+#----------------------------------------------------------------------------------------------------------------------------------------- upload_img Route = Product Image Upload
+
+# for uploading the images into the dunkin table in database
+@app.route('/upload_img', methods=['POST'])
+def upload_img():
+    image_name = request.form['image_name']
+    files = request.files.getlist('images')
+
+    if not files:
+        return "No files selected", 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                cursor.execute(
+                    "INSERT INTO dunkin (name, dunkin_img) VALUES (%s, %s)",
+                    (image_name, filename)
+                )
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('admin'))
+
+    except Exception as e:
+        return f"Upload failed: {e}"
+
+#----------------------------------------------------------------------------------------------------------------------------------------- home Route
 @app.route('/')
 def home():
     return render_template('Home.html')
+
+#----------------------------------------------------------------------------------------------------------------------------------------- about Route
 
 @app.route('/about')
 def about():
     return render_template('About.html')
 
+#----------------------------------------------------------------------------------------------------------------------------------------- cart Route
+
 @app.route('/cart')
 def cart():
     return render_template('Cart.html')
 
+
+#----------------------------------------------------------------------------------------------------------------------------------------- shops Route = Retrieving Images from shop table to Shop Page
+
+# for retrieving the images from shops table into the Shops Page
 @app.route('/shops')
 def shops():
-    return render_template('Shops.html')
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM shops")
+    shops_com = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('Shops.html', shops=shops_com)
 
+#----------------------------------------------------------------------------------------------------------------------------------------- admin Route = retrieval and testing if the files are uploaded
+
+# for retrieving and testing if the images are being uploaded
 @app.route('/admin')
 def admin():
-    return render_template('Admin.html')
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM dunkin")
+    images = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('Admin.html', images=images)
 
+
+#----------------------------------------------------------------------------------------------------------------------------------------- logout Route
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
+#----------------------------------------------------------------------------------------------------------------------------------------- register Route = Register (with OTP)
 # Register (with OTP)
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -80,9 +186,12 @@ def register():
             return render_template("OTPVerif.html", email=email)
 
         except Exception as e:
-            return f"❌ Error sending email: {str(e)}"
+            return f" Error sending email: {str(e)}"
 
     return render_template('LogReg.html')
+
+#----------------------------------------------------------------------------------------------------------------------------------------- verify_otp Route = Verifying the OTP and holding the name,email,password
+#-----------------------------------------------------------------------------------------------------------------------------------------                    until the OTP is correct
 
 # for verification of OTP
 @app.route('/verify_otp', methods=['POST'])
@@ -119,7 +228,9 @@ def verify_otp():
             email=session.get('pending_email')
         )
 
-# --- STEP 3: Login ---
+#----------------------------------------------------------------------------------------------------------------------------------------- login Route = Retrieval of email/password and comparing the hashed password
+#-----------------------------------------------------------------------------------------------------------------------------------------               into the real password
+# retrieving the email and password and comparing if the hashed password is the same to the unhashed password
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -153,7 +264,8 @@ def login():
 
     return render_template('LogReg.html')
 
-# --- STEP 4: Logged user page ---
+#----------------------------------------------------------------------------------------------------------------------------------------- logged Route = For Checking if the user got logged in
+# if the user is successfully logged it will go to the success Page
 @app.route('/logged')
 def logged():
     name = session.get('name', 'Guest')
