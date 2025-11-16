@@ -3,153 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>Donuts ni Noy</title>
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Home.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='tabicon.png') }}" type="image/png">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Lobster&display=swap" rel="stylesheet">
-
-    <style type="text/css">
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Lobster', cursive;
-            background: none;
-            overflow-x: hidden;
-            background: #FD5DA8;
-        }
-
-        .video-bg {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-            object-fit: cover;
-        }
-
-        .logo img {
-            width: 125px;
-        }
-
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 20px 15%;
-            background: rgba(0,0,0, 0.5);
-            position: relative;
-            z-index: 10;
-        }
-
-        nav {
-            flex: 1;
-            text-align: right;
-        }
-
-        nav ul {
-            list-style: none;
-        }
-
-        nav ul li {
-            display: inline-block;
-            margin-left: 30px;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: #ffffff;
-            font-size: 25px;
-            transition: 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #f5821f;
-        }
-
-        .hero {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        max-width: 1200px;
-        margin: 100px auto;
-        padding: 0 50px;
-        gap: 50px;
-        }
-
-        .hero-text {
-            flex: 1;
-            text-align: left;
-        }
-
-        .hero-text h1 {
-            font-size: 60px;
-            line-height: 1.2;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
-            margin-bottom: 15px;
-        }
-
-        .hero-text p {
-            font-size: 20px;
-            margin-bottom: 25px;
-            color: #fff;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #f5821f;
-            color: #ffffff;
-            padding: 12px 35px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background: #000000;
-        }
-
-        .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hero-image img {
-            max-width: 1000px;
-            border-radius: 5px;
-        }
-
-        .col-4 img, .col-5 img {
-            width: 100%;
-            border-radius: 20px;
-            transition: transform 0.4s;
-        }
-
-        .col-4 img:hover, .col-5 img:hover {
-            transform: scale(1.05);
-        }
-
-        h1{
-            color: #ffffff;
-        }
-
-        h2, p {
-            color: #fff;
-            margin-top: 10px;
-        }
-
-    </style>
 
 
 </head>
@@ -171,12 +29,12 @@
                     {% if session.get('user_type') == 'admin' %}
                         <li><a href="{{ url_for('admin') }}">Admin Dashboard</a></li>
                     {% endif %}
-                    <li><a href="{{ url_for('logout') }}" onclick="return confirm('Are you sure you want to Log-Out?')">Logout</a>
-                    </li>
+                    <li><a href="{{ url_for('logout') }}" onclick="return confirm('Are you sure you want to Log-Out?')">Logout</a></li>
+                    <li style="color:#fff; font-size:22px;">Hello! {{ session.get('name', 'User') }}</li>
                 {% else %}
                     <li><a href="{{ url_for('login') }}">Login/Register</a></li>
                 {% endif %}
-                <li style="color:#fff; font-size:22px;">Hello! {{ session.get('name', 'User') }}</li>
+
             </ul>
         </nav>
     </div>
@@ -191,7 +49,6 @@
             <img src="{{ url_for('static', filename='background.jpg') }}" alt="Donuts">
         </div>
     </section>
-
 
 </body>
 </html>

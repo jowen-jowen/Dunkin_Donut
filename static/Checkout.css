@@ -1,0 +1,46 @@
+body {
+    font-family: 'Lobster', cursive;
+    background: linear-gradient(to right, #f5821f, #FD5DA8);
+    padding: 40px;
+}
+
+.checkout-container {
+    max-width: 700px;
+    margin: auto;
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 24px;
+    display: block;
+    margin-top: 20px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+.pay-btn {
+    background: #fcb64d;
+    width: 100%;
+    padding: 20px;
+    font-size: 26px;
+    border-radius: 40px;
+    border: none;
+    margin-top: 30px;
+    cursor: pointer;
+}

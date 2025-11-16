@@ -3,7 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 import mysql.connector
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from mysql.connector import Error
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -61,7 +61,7 @@ def upload_shops():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Save shop image(s) into shops table
+        # Save shop images into shops table
         for fileshop in file_shop:
             if fileshop and allowed_file(fileshop.filename):
                 filename = secure_filename(fileshop.filename)
@@ -111,7 +111,7 @@ def upload_img():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Sanitize table name before using it in query
+        # Sanitize(remove un-necessary character ex: ',") table name before using it in query
         shop_table = sanitize_table_name(shop_table)
 
         for file in files:
@@ -308,7 +308,7 @@ def shop_products(shop_name):
     return render_template('Shops.html', products=products, shop_name=shop_name)
 
 
-#----------------------------------------------------------------------------------------------------------------------- shops Route = Retrieving Images from shop table to Shop Page
+#----------------------------------------------------------------------------------------------------------------------- remove_shops Route
 # Remove shop in the database
 
 @app.route('/remove_shop/<shop_name>', methods=['POST'])
@@ -328,6 +328,7 @@ def remove_shop(shop_name):
     conn.close()
     return redirect(url_for('admin'))
 
+#----------------------------------------------------------------------------------------------------------------------- shops Route = Retrieving Images from shop table to Shop Page
 # for retrieving the images from shops table into the Shops Page
 @app.route('/shops')
 def shops():
@@ -342,6 +343,75 @@ def shops():
 
     return render_template('Shops.html', shops=shops_com)
 
+#----------------------------------------------------------------------------------------------------------------------- checkout Route
+@app.route('/checkout')
+def checkout():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('Checkout.html')
+
+#----------------------------------------------------------------------------------------------------------------------- confirm_order Route
+@app.route('/confirm_order', methods=['POST'])
+def confirm_order():
+    # this confirms if the user is not logged in
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    fullname = request.form['fullname']
+    phone = request.form['phone']
+    address = request.form['address']
+    payment = request.form['payment']
+    notes = request.form.get('notes', '')
+
+    user_id = session['user_id']
+    username = session['name']
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get all items from cart
+    cursor.execute("SELECT * FROM cart WHERE user_id=%s", (user_id,))
+    cart_items = cursor.fetchall()
+
+# if there's nothing in cart it will return the text
+    if not cart_items:
+        return "Cart is empty"
+
+    products_list = []
+    total_price = 0
+
+    for item in cart_items:
+        table = sanitize_table_name(item['shop_table'])
+
+        cursor.execute(
+            f"SELECT name, price FROM `{table}` WHERE id = %s",
+            (item['product_id'],)
+        )
+        product = cursor.fetchone()
+
+        if product:
+            subtotal = product['price'] * item['quantity']
+            total_price += subtotal
+            products_list.append(
+                f"{product['name']} (Qty: {item['quantity']})"
+            )
+
+    products_text = ", ".join(products_list)
+
+    # Inserting order into DB
+    cursor.execute("""
+        INSERT INTO orders (user_id, username, products, total_price,fullname, phone, address, payment_method, notes)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """, (user_id, username, products_text, total_price,fullname, phone, address, payment, notes))
+
+    # Clear cart
+    cursor.execute("DELETE FROM cart WHERE user_id = %s", (user_id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"success": True, "message": "Order Confirmed"})
 
 
 #----------------------------------------------------------------------------------------------------------------------- admin Route = retrieval and testing if the files are uploaded
@@ -480,29 +550,28 @@ def login():
             cursor = conn.cursor(dictionary=True)
             cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
             user = cursor.fetchone()
-            cursor.close()
             conn.close()
+
         except Error:
+            flash("Database error! Try again later.", "error")
             return redirect(url_for('login'))
 
-        if user:
-            if check_password_hash(user['password'], password):
-                session['name'] = user['name']
-                session['user_id'] = user['id']
-                session['user_type'] = user.get('user_type', 'user')
+        if user and check_password_hash(user['password'], password):
+            session['name'] = user['name']
+            session['user_id'] = user['id']
+            session['user_type'] = user.get("user_type", "user")
+
+            if session['user_type'] == "admin":
+                return redirect(url_for('admin'))
+            return redirect(url_for('logged'))
+
+        # If login fails it will show error message
+        error = "Email or Password is incorrect"
+        return render_template('LogReg.html', login_error=error)
+
+    return render_template('LogReg.html', error="Email or Password is incorrect")
 
 
-                # redirect based on user_type
-                if session['user_type'] == 'admin':
-                    return redirect(url_for('admin'))
-                else:
-                    return redirect(url_for('logged'))
-            else:
-                return render_template('LogReg.html', error="Incorrect password")
-        else:
-            return render_template('LogReg.html', error="No user found")
-
-    return render_template('LogReg.html')
 
 #----------------------------------------------------------------------------------------------------------------------- logged Route = For Checking if the user got logged in
 # if the user is successfully logged it will go to the success Page

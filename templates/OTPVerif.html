@@ -3,43 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Verify OTP</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #FD5DA8, #f5821f);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .box {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 350px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            text-align: center;
-            font-size: 18px;
-            letter-spacing: 5px;
-        }
-        button {
-            padding: 10px 30px;
-            border: none;
-            background-color: #512da8;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        p { color: red; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='OTPVerif.css') }}">
 </head>
 <body>
     <div class="box">
