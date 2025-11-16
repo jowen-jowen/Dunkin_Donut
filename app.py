@@ -3,7 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 import mysql.connector
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from mysql.connector import Error
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -189,7 +189,15 @@ def cart():
                 "product_name": product['name'],
                 "price": product['price'],
                 "product_img": product['product_img'],
-                "quantity": row['quantity']
+                "quantity": row['quantity'],
+
+                # REAL numeric product ID
+                "product_id": row['product_id'],
+                "shop_table": row["shop_table"],
+
+
+                # UNIQUE KEY for HTML (product name + shop)
+                "unique_id": f"{product['name']}_{row['shop_table']}".replace(" ", "_")
             })
 
     cursor.close()
@@ -225,13 +233,14 @@ def remove_cart_item():
         return redirect(url_for('login'))
 
     product_id = request.form['product_id']
+    shop_table = request.form['shop_table']
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM cart WHERE user_id=%s AND product_id=%s",
-                   (session['user_id'], product_id))
+    cursor.execute("DELETE FROM cart WHERE user_id=%s AND product_id=%s AND shop_table=%s",
+                   (session['user_id'], product_id, shop_table))
     conn.commit()
 
-    return redirect(url_for('cart'))
+    return jsonify({"success": True, "message": "Item removed!"})
 
 #----------------------------------------------------------------------------------------------------------------------- add_to_cart Route
 @app.route("/add_to_cart", methods=["POST"])
@@ -275,7 +284,7 @@ def add_to_cart():
     cursor.close()
     conn.close()
 
-    return redirect(url_for("cart"))
+    return jsonify({"success": True, "message": "Product added to cart!"})
 
 
 
