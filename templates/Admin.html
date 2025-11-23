@@ -66,12 +66,14 @@
                         <!-- Remove user -->
                         <form action="{{ url_for('remove_user', user_id=user.id) }}" method="POST"
                               style="display:inline;">
-                            <button style="border: 1px; background:  red; color: white" type="submit">Remove</button>
+                            <button style="border: 1px; background:  red; color: white" type="submit" onclick="return confirm('Are you sure you want to Remove this User?')">
+                                Remove</button>
                         </form>
                         <!-- Promote to Admin -->
                         <form action="{{ url_for('promote_user', user_id=user.id) }}" method="POST"
                               style="display:inline;">
-                            <button style="border: 1px; background: green; color: white" type="submit">Promote to Admin</button>
+                            <button style="border: 1px; background: green; color: white" type="submit" onclick="return confirm('Are you sure you want to Promote this into Admin?')">
+                                Promote to Admin</button>
                         </form>
                     </td>
                 </tr>
@@ -104,15 +106,17 @@
                     <td>{{ user.user_type }}</td>
                     <td>{{ user.created_at }}</td>
                     <td>
-                        <!-- Remove user -->
+                        <!-- Remove Admin -->
                         <form action="{{ url_for('remove_user', user_id=user.id) }}" method="POST"
                               style="display:inline;">
-                            <button style="border: 1px; background: red; color: white" type="submit">Remove</button>
+                            <button style="border: 1px; background: red; color: white" type="submit" onclick="return confirm('Are you sure you want to Remove this Admin?')">
+                                Remove</button>
                         </form>
-                        <!-- Demote user -->
+                        <!-- Demote to User -->
                         <form action="{{ url_for('demote_user', user_id=user.id) }}" method="POST"
                               style="display:inline;">
-                            <button style="border: 2px; background: #512da8; color: white" type="submit">Demote to User</button>
+                            <button style="border: 2px; background: #512da8; color: white" type="submit" onclick="return confirm('Are you sure you want to Demote this into User?')">
+                                Demote to User</button>
                         </form>
                     </td>
                 </tr>
@@ -122,6 +126,7 @@
     </table>
     <hr>
     <br><br>
+
     <h1 style="text-align: center">Pending Users</h1>
     <table class="user-table">
         <thead>
@@ -141,14 +146,15 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.created_at }}</td>
                 <td>
-                    <!-- Remove user -->
+                    <!-- Remove Pending User -->
                     <form action="{{ url_for('remove_pending_user', user_id=user.id) }}" method="POST"
                           style="display:inline;">
-                        <button type="submit" style="background-color:red;color:white;">Remove</button>
+                        <button type="submit" style="background-color:red;color:white;" onclick="return confirm('Are you sure you want to Reject this Pending User?')">
+                            Reject</button>
                     </form>
-                    <!-- Approve user -->
+                    <!-- Approve Pending User -->
                     <form action="{{ url_for('approve_user', user_id=user.id) }}" method="POST" style="display:inline;">
-                        <button type="submit" style="background-color:green;color:white;">Approve</button>
+                        <button type="submit" style="background-color:green;color:white;" onclick="return confirm('Are you sure you want to Approve this User?')">Approve</button>
                     </form>
                 </td>
             </tr>

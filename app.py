@@ -45,6 +45,36 @@ def sanitize_table_name(name):
     table_name = table_name.replace("-", "_")
     return table_name
 
+# sending a confirmation email if the user is approved
+def send_approval_email(email, name):
+    try:
+        sender = "japquinones1977@gmail.com"
+        app_password = "vtwk zbdv ulxe bzpm"  # Gmail app password
+
+        message = f"""
+Hello {name},
+
+Your account has been approved! 
+
+You may now log in to Donuts Ni Noy and start ordering.
+
+Thank you!
+        """
+
+        msg = MIMEText(message)
+        msg['Subject'] = "Your Account Has Been Approved"
+        msg['From'] = "Donuts Ni Noy"
+        msg['To'] = email
+
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(sender, app_password)
+            server.sendmail(sender, email, msg.as_string())
+
+    except Exception as e:
+        print("Error sending approval email:", e)
+
+
 #----------------------------------------------------------------------------------------------------------------------- home Route = Landing Page
 @app.route('/')
 def home():
@@ -633,29 +663,36 @@ def approve_user(user_id):
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Get user info from pending_users
-        cursor.execute("SELECT name, email, password FROM pending_users WHERE id=%s", (user_id,))
-        user = cursor.fetchone()
-        if not user:
-            conn.close()
-            flash("User not found", "error")
+        # Get user from pending users
+        cursor.execute("SELECT * FROM pending_users WHERE id=%s", (user_id,))
+        pending_user = cursor.fetchone()
+
+        if not pending_user:
+            flash("User not found.", "error")
             return redirect(url_for('admin'))
 
-        # Insert into users table
-        cursor.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
-                       (user['name'], user['email'], user['password']))
+        # Move user to users table
+        cursor.execute("""
+            INSERT INTO users (name, email, password, user_type)
+            VALUES (%s, %s, %s, 'user')
+        """, (pending_user['name'], pending_user['email'], pending_user['password']))
 
-        # Remove from pending_users
+        # Delete from pending
         cursor.execute("DELETE FROM pending_users WHERE id=%s", (user_id,))
-
         conn.commit()
+
         cursor.close()
         conn.close()
 
-        flash("User approved successfully!", "success")
+        # SEND APPROVAL EMAIL
+        send_approval_email(pending_user['email'], pending_user['name'])
+
+        flash("User approved and notified via email!", "success")
+        return redirect(url_for('admin'))
+
     except Exception as e:
-        flash(f"Error approving user: {e}", "error")
-    return redirect(url_for('admin'))
+        return f"Database error: {e}"
+
 
 #----------------------------------------------------------------------------------------------------------------------- remove_pending_user Route = Remove pending user
 
