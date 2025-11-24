@@ -359,7 +359,7 @@ def cart():
                 "shop_table": row["shop_table"],
 
 
-                # UNIQUE KEY for HTML (product name + shop)
+                # UNIQUE KEY (product name + shop)
                 "unique_id": f"{product['name']}_{row['shop_table']}".replace(" ", "_")
             })
 
@@ -680,6 +680,7 @@ def approve_user(user_id):
         # Delete from pending
         cursor.execute("DELETE FROM pending_users WHERE id=%s", (user_id,))
         conn.commit()
+
 
         cursor.close()
         conn.close()
